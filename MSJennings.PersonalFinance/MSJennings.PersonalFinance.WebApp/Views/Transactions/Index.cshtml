@@ -1,0 +1,31 @@
+﻿@model MSJennings.PersonalFinance.WebApp.ViewModels.Transactions.TransactionsIndexViewModel
+
+@{
+    ViewData["Title"] = "Transactions";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Category</th>
+            <th>Memo</th>
+            <th>Amount</th>
+            <th>Is Credit</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var transaction in Model.TransactionsList.OrderBy(x => x.Date))
+        {
+            <tr>
+                <td>@transaction.Date</td>
+                <td>@transaction.Category.Name</td>
+                <td>@transaction.Memo</td>
+                <td>@transaction.Amount</td>
+                <td>@transaction.IsCredit</td>
+            </tr>
+        }
+    </tbody>
+</table>
