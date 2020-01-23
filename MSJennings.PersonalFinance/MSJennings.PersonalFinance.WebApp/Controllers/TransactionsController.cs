@@ -62,8 +62,24 @@ namespace MSJennings.PersonalFinance.WebApp.Controllers
         [HttpGet("{id}/[action]")]
         public async Task<IActionResult> Details(int id)
         {
-            var result = Content("// todo: GET Details");
-            return await Task.FromResult(result).ConfigureAwait(false);
+            var transaction = await _transactionsDataService.RetrieveTransactionAsync(id).ConfigureAwait(false);
+            if (transaction == null)
+            {
+                return NotFound();
+            }
+
+            var viewModel = new TransactionDetailsViewModel
+            {
+                Id = transaction.Id,
+                Date = transaction.Date,
+                CategoryId = transaction.CategoryId,
+                CategoryName = transaction.Category.Name,
+                Memo = transaction.Memo,
+                Amount = transaction.Amount,
+                IsCredit = transaction.IsCredit
+            };
+
+            return View(viewModel);
         }
 
         [HttpGet("{id}/[action]")]
