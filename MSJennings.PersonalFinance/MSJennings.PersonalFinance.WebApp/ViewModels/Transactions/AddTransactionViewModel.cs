@@ -11,7 +11,7 @@ namespace MSJennings.PersonalFinance.WebApp.ViewModels.Transactions
         [Required]
         public decimal Amount { get; set; }
 
-        public SelectList Category { get; private set; }
+        public SelectList CategoriesList { get; set; }
 
         [Required]
         public int CategoryId { get; set; }

@@ -1,6 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Globalization;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
+using MSJennings.PersonalFinance.Data.Models;
 using MSJennings.PersonalFinance.Data.Services;
 using MSJennings.PersonalFinance.WebApp.ViewModels.Transactions;
 
@@ -11,6 +16,7 @@ namespace MSJennings.PersonalFinance.WebApp.Controllers
     {
         #region Private Fields
 
+        private readonly ICategoriesDataService _categoriesDataService;
         private readonly ILogger<TransactionsController> _logger;
         private readonly ITransactionsDataService _transactionsDataService;
 
@@ -19,25 +25,27 @@ namespace MSJennings.PersonalFinance.WebApp.Controllers
         #region Public Constructors
 
         public TransactionsController(
-            ITransactionsDataService transactionsDataService,
-            ILogger<TransactionsController> logger)
+            ICategoriesDataService categoriesDataService,
+            ILogger<TransactionsController> logger,
+            ITransactionsDataService transactionsDataService)
         {
-            _transactionsDataService = transactionsDataService;
+            _categoriesDataService = categoriesDataService;
             _logger = logger;
+            _transactionsDataService = transactionsDataService;
         }
 
         #endregion Public Constructors
 
         #region Public Methods
 
-        [HttpGet]
+        [HttpGet("[action]")]
         public async Task<IActionResult> Add()
         {
             var result = Content("// todo: GET Add");
             return await Task.FromResult(result).ConfigureAwait(false);
         }
 
-        [HttpPost]
+        [HttpPost("[action]")]
         public async Task<IActionResult> Add(AddTransactionViewModel viewModel)
         {
             var result = Content("// todo: POST Add");
@@ -61,15 +69,53 @@ namespace MSJennings.PersonalFinance.WebApp.Controllers
         [HttpGet("{id}/[action]")]
         public async Task<IActionResult> Edit(int id)
         {
-            var result = Content("// todo: GET Edit");
-            return await Task.FromResult(result).ConfigureAwait(false);
+            var transaction = await _transactionsDataService.RetrieveTransactionAsync(id).ConfigureAwait(false);
+            if (transaction == null)
+            {
+                return NotFound();
+            }
+
+            var viewModel = new EditTransactionViewModel
+            {
+                Id = transaction.Id,
+                Date = transaction.Date,
+                CategoryId = transaction.CategoryId,
+                CategoriesList = new SelectList(
+                    await _categoriesDataService.RetrieveCategoriesAsync().ConfigureAwait(false),
+                    nameof(Category.Id),
+                    nameof(Category.Name)),
+                Memo = transaction.Memo,
+                Amount = transaction.Amount,
+                IsCredit = transaction.IsCredit
+            };
+
+            return View(viewModel);
         }
 
         [HttpPost("{id}/[action]")]
         public async Task<IActionResult> Edit(EditTransactionViewModel viewModel)
         {
-            var result = Content("// todo: POST Edit");
-            return await Task.FromResult(result).ConfigureAwait(false);
+            if (viewModel is null)
+            {
+                throw new ArgumentNullException(nameof(viewModel));
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(viewModel);
+            }
+
+            _ = await _transactionsDataService.UpdateTransactionAsync(new Transaction
+            {
+                Id = viewModel.Id,
+                Date = viewModel.Date,
+                CategoryId = viewModel.CategoryId,
+                Memo = viewModel.Memo,
+                Amount = viewModel.Amount,
+                IsCredit = viewModel.IsCredit
+            }).ConfigureAwait(false);
+
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
