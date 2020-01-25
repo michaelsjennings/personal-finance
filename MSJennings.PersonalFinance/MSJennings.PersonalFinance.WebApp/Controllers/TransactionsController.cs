@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Globalization;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -41,15 +39,41 @@ namespace MSJennings.PersonalFinance.WebApp.Controllers
         [HttpGet("[action]")]
         public async Task<IActionResult> Add()
         {
-            var result = Content("// todo: GET Add");
-            return await Task.FromResult(result).ConfigureAwait(false);
+            var viewModel = new AddTransactionViewModel
+            {
+                Date = DateTime.Today,
+                CategoriesList = new SelectList(
+                    await _categoriesDataService.RetrieveCategoriesAsync().ConfigureAwait(false),
+                    nameof(Category.Id),
+                    nameof(Category.Name))
+            };
+
+            return View(viewModel);
         }
 
         [HttpPost("[action]")]
         public async Task<IActionResult> Add(AddTransactionViewModel viewModel)
         {
-            var result = Content("// todo: POST Add");
-            return await Task.FromResult(result).ConfigureAwait(false);
+            if (viewModel is null)
+            {
+                throw new ArgumentNullException(nameof(viewModel));
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(viewModel);
+            }
+
+            _ = await _transactionsDataService.CreateTransactionAsync(new Transaction
+            {
+                Date = viewModel.Date,
+                CategoryId = viewModel.CategoryId,
+                Memo = viewModel.Memo,
+                Amount = viewModel.Amount,
+                IsCredit = viewModel.IsCredit
+            }).ConfigureAwait(false);
+
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpPost("{id}/[action]")]
