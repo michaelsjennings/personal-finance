@@ -33,6 +33,9 @@
                 <td>
                     <a title="Details" asp-action="Details" asp-route-id="@transaction.Id">Details</a>
                     <a title="Edit" asp-action="Edit" asp-route-id="@transaction.Id">Edit</a>
+                    <form asp-action="Delete" asp-route-id="@transaction.Id" method="post">
+                        <input type="submit" title="Delete" value="Delete" />
+                    </form>
                 </td>
             </tr>
         }

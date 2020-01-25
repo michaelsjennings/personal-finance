@@ -79,8 +79,8 @@ namespace MSJennings.PersonalFinance.WebApp.Controllers
         [HttpPost("{id}/[action]")]
         public async Task<IActionResult> Delete(int id)
         {
-            var result = Content("// todo: POST Delete");
-            return await Task.FromResult(result).ConfigureAwait(false);
+            _ = await _transactionsDataService.DeleteTransactionAsync(id).ConfigureAwait(false);
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpGet("{id}/[action]")]
