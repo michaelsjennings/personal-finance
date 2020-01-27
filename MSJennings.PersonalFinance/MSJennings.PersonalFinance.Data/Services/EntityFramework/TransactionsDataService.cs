@@ -20,6 +20,11 @@ namespace MSJennings.PersonalFinance.Data.Services.EntityFramework
 
         public TransactionsDataService(AppDbContext dbContext)
         {
+            if (dbContext is null)
+            {
+                throw new ArgumentNullException(nameof(dbContext));
+            }
+
             _dbContext = dbContext;
         }
 

@@ -10,7 +10,7 @@ namespace MSJennings.PersonalFinance.Data.Services.EntityFramework
 
         public static IServiceCollection AddEntityFrameworkDataServices(this IServiceCollection services, string connectionString)
         {
-            if (services == null)
+            if (services is null)
             {
                 throw new ArgumentNullException(nameof(services));
             }

@@ -27,6 +27,21 @@ namespace MSJennings.PersonalFinance.WebApp.Controllers
             ILogger<TransactionsController> logger,
             ITransactionsDataService transactionsDataService)
         {
+            if (categoriesDataService is null)
+            {
+                throw new ArgumentNullException(nameof(categoriesDataService));
+            }
+
+            if (logger is null)
+            {
+                throw new ArgumentNullException(nameof(logger));
+            }
+
+            if (transactionsDataService is null)
+            {
+                throw new ArgumentNullException(nameof(transactionsDataService));
+            }
+
             _categoriesDataService = categoriesDataService;
             _logger = logger;
             _transactionsDataService = transactionsDataService;
