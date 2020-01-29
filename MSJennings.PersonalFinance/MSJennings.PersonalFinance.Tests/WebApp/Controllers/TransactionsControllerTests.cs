@@ -24,56 +24,14 @@ namespace MSJennings.PersonalFinance.Tests.WebApp.Controllers
         public async Task Add_WithGetRequest_ShouldReturnViewWithViewModel()
         {
             // Arrange
-            var mockCategoriesDataService = new Mock<ICategoriesDataService>();
-            var mockLogger = new Mock<ILogger<TransactionsController>>();
-            var mockTransactionsDataService = new Mock<ITransactionsDataService>();
-
             var categories = new List<Category>
             {
                 new Category { Id = 101, Name = "Category One" },
                 new Category { Id = 102, Name = "Category Two" },
                 new Category { Id = 103, Name = "Category Three" }
             };
-
-            mockCategoriesDataService.Setup(x => x.RetrieveCategoriesAsync()).ReturnsAsync(categories);
-
-            using var controller = new TransactionsController(
-                mockCategoriesDataService.Object,
-                mockLogger.Object,
-                mockTransactionsDataService.Object);
-
-            // Act
-            var result = await controller.Add();
-
-            // Assert
-            Assert.IsNotNull(result, FailureMessages.ResultIsNull);
-            Assert.IsInstanceOfType(result, typeof(ViewResult), FailureMessages.ResultNotExpectedType);
-
-            var viewResult = result as ViewResult;
-            Assert.IsNotNull(viewResult.Model, FailureMessages.ViewModelIsNull);
-            Assert.IsInstanceOfType(viewResult.Model, typeof(AddTransactionViewModel), FailureMessages.ViewModelNotExpectedType);
-
-            var viewModel = viewResult.Model as AddTransactionViewModel;
-            Assert.AreEqual(DateTime.Today, viewModel.Date);
-            Assert.AreEqual(categories.Count, viewModel.CategoriesList.Count());
-        }
-
-        [TestMethod]
-        public async Task Add_WithGetRequest_ShouldReturnViewWithViewModel_2()
-        {
-            // Arrange
-            var categories = new List<Category>
-            {
-                new Category { Id = 101, Name = "Category One" },
-                new Category { Id = 102, Name = "Category Two" },
-                new Category { Id = 103, Name = "Category Three" }
-            };
-
-            //var controllerBuilder = new ControllerBuilder<TransactionsController>();
-            //controllerBuilder.Mocks<ITransactionsDataService>().Setup(x => x.RetrieveCategoriesAsync()).ReturnsAsync(categories);
 
             var controllerBuilder = new TransactionsControllerBuilder();
-
             controllerBuilder.MockCategoriesDataService.Setup(x => x.RetrieveCategoriesAsync()).ReturnsAsync(categories);
 
             using var controller = controllerBuilder.Build();
@@ -90,31 +48,30 @@ namespace MSJennings.PersonalFinance.Tests.WebApp.Controllers
             Assert.IsInstanceOfType(viewResult.Model, typeof(AddTransactionViewModel), FailureMessages.ViewModelNotExpectedType);
 
             var viewModel = viewResult.Model as AddTransactionViewModel;
-            Assert.AreEqual(DateTime.Today, viewModel.Date);
-            Assert.AreEqual(categories.Count, viewModel.CategoriesList.Count());
+            Assert.AreEqual(DateTime.Today, viewModel.Date, FailureMessages.ViewModelPropertyNotExpectedValue);
+            Assert.AreEqual(categories.Count, viewModel.CategoriesList.Count(), FailureMessages.IncorrectItemCount);
         }
 
-        /*
         [TestMethod]
-        public async Task Add_WithGetRequest_ShouldReturnViewWithViewModel_3()
+        public async Task Add_WithInvalidViewModel_ShouldReturnViewWithSameViewModel()
         {
             // Arrange
-            var categories = new List<Category>
-            {
-                new Category { Id = 101, Name = "Category One" },
-                new Category { Id = 102, Name = "Category Two" },
-                new Category { Id = 103, Name = "Category Three" }
-            };
-
-            //var controllerBuilder = new ControllerBuilder<TransactionsController>();
-            //controllerBuilder.Mocks<ITransactionsDataService>().Setup(x => x.RetrieveCategoriesAsync()).ReturnsAsync(categories);
-
-            var controllerBuilder = new ControllerBuilder<TransactionsController>();
-            controllerBuilder.Mocks<ICategoriesDataService>().Setup(x => x.RetrieveCategoriesAsync()).ReturnsAsync(categories);
+            var controllerBuilder = new TransactionsControllerBuilder();
             using var controller = controllerBuilder.Build();
 
+            controller.ModelState.AddModelError("SomeKey", "SomeErrorMessage");
+
+            var postedViewModel = new AddTransactionViewModel
+            {
+                Date = new DateTime(2008, 11, 17),
+                CategoryId = 101,
+                Memo = "Something",
+                Amount = 123.45m,
+                IsCredit = false
+            };
+
             // Act
-            var result = await controller.Add();
+            var result = await controller.Add(postedViewModel);
 
             // Assert
             Assert.IsNotNull(result, FailureMessages.ResultIsNull);
@@ -124,15 +81,12 @@ namespace MSJennings.PersonalFinance.Tests.WebApp.Controllers
             Assert.IsNotNull(viewResult.Model, FailureMessages.ViewModelIsNull);
             Assert.IsInstanceOfType(viewResult.Model, typeof(AddTransactionViewModel), FailureMessages.ViewModelNotExpectedType);
 
-            var viewModel = viewResult.Model as AddTransactionViewModel;
-            Assert.AreEqual(DateTime.Today, viewModel.Date);
-            Assert.AreEqual(categories.Count, viewModel.CategoriesList.Count());
-        }
-        */
-
-        [TestMethod]
-        public async Task Add_WithInvalidViewModel_ShouldReturnViewWithSameViewModel()
-        {
+            var resultViewModel = viewResult.Model as AddTransactionViewModel;
+            Assert.AreEqual(postedViewModel.Date, resultViewModel.Date, FailureMessages.ViewModelPropertyNotExpectedValue);
+            Assert.AreEqual(postedViewModel.CategoryId, resultViewModel.CategoryId, FailureMessages.ViewModelPropertyNotExpectedValue);
+            Assert.AreEqual(postedViewModel.Memo, resultViewModel.Memo, FailureMessages.ViewModelPropertyNotExpectedValue);
+            Assert.AreEqual(postedViewModel.Amount, resultViewModel.Amount, FailureMessages.ViewModelPropertyNotExpectedValue);
+            Assert.AreEqual(postedViewModel.IsCredit, resultViewModel.IsCredit, FailureMessages.ViewModelPropertyNotExpectedValue);
         }
 
         [TestMethod]
@@ -200,7 +154,8 @@ namespace MSJennings.PersonalFinance.Tests.WebApp.Controllers
 
             //public const string ExceptionNotExpectedType = "Exception is not the expected type";
             //public const string ExceptionNotThrown = "Exception was not thrown";
-            //public const string IncorrectItemCount = "Sequence does not contain the expected number of items";
+            public const string IncorrectItemCount = "Sequence does not contain the expected number of items";
+
             //public const string MissingExpectedItem = "Sequence does not contain an expected item";
             //public const string ResultIsNotNull = "Result is not null";
             public const string ResultIsNull = "Result is null";
@@ -214,72 +169,22 @@ namespace MSJennings.PersonalFinance.Tests.WebApp.Controllers
             public const string ViewModelIsNull = "View model is null";
 
             public const string ViewModelNotExpectedType = "View model is not the expected type";
+            public const string ViewModelPropertyNotExpectedValue = "View model property is not the expected value";
 
             #endregion Public Fields
         }
 
-        /*
-        private class ControllerBuilder<T> where T : Controller
-        {
-            private readonly IDictionary<Type, Mock> _mocks;
-
-            public ControllerBuilder()
-            {
-                _mocks = new Dictionary<Type, Mock>();
-
-                var typeOfT = typeof(T);
-                var constructor = typeOfT.GetConstructors().Single();
-
-                var parameters = constructor.GetParameters();
-
-                foreach (var parameter in parameters)
-                {
-                    var mock = (Mock)Activator.CreateInstance(parameter.GetType());
-
-                    _mocks.Add(parameter.GetType(), mock);
-                }
-            }
-
-            public Mock<TMock> Mocks<TMock>() where TMock : class
-            {
-                var mockType = typeof(TMock);
-                if (_mocks.TryGetValue(mockType, out var mock))
-                {
-                    return mock as Mock<TMock>;
-                }
-
-                throw new ArgumentException();
-            }
-
-            public T Build()
-            {
-                return new T()
-            }
-        }
-        */
-
         private class TransactionsControllerBuilder
         {
-            #region Public Constructors
+            #region Public Fields
 
-            public TransactionsControllerBuilder()
-            {
-                MockCategoriesDataService = new Mock<ICategoriesDataService>();
-                MockLogger = new Mock<ILogger<TransactionsController>>();
-                MockTransactionsDataService = new Mock<ITransactionsDataService>();
-            }
+            public readonly Mock<ICategoriesDataService> MockCategoriesDataService = new Mock<ICategoriesDataService>();
 
-            #endregion Public Constructors
+            public readonly Mock<ILogger<TransactionsController>> MockLogger = new Mock<ILogger<TransactionsController>>();
 
-            #region Public Properties
+            public readonly Mock<ITransactionsDataService> MockTransactionsDataService = new Mock<ITransactionsDataService>();
 
-            public Mock<ICategoriesDataService> MockCategoriesDataService { get; private set; }
-
-            public Mock<ILogger<TransactionsController>> MockLogger { get; private set; }
-
-            public Mock<ITransactionsDataService> MockTransactionsDataService { get; private set; }
-
-            #endregion Public Properties
+            #endregion Public Fields
 
             #region Public Methods
 

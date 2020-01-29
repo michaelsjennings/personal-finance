@@ -168,7 +168,7 @@ namespace MSJennings.PersonalFinance.Tests.Data.Services.EntityFramework
             Assert.AreEqual(1, dbContext.Transactions.Count(), FailureMessages.IncorrectItemCount);
 
             // Act
-            var result = service.DeleteTransaction(201);
+            var result = service.DeleteTransaction(transaction.Id);
 
             // Assert
             Assert.IsTrue(result, FailureMessages.ResultNotExpectedValue);
@@ -215,7 +215,7 @@ namespace MSJennings.PersonalFinance.Tests.Data.Services.EntityFramework
             Assert.AreEqual(1, dbContext.Transactions.Count(), FailureMessages.IncorrectItemCount);
 
             // Act
-            var result = await service.DeleteTransactionAsync(201);
+            var result = await service.DeleteTransactionAsync(transaction.Id);
 
             // Assert
             Assert.IsTrue(result, FailureMessages.ResultNotExpectedValue);
@@ -259,7 +259,7 @@ namespace MSJennings.PersonalFinance.Tests.Data.Services.EntityFramework
             var service = new TransactionsDataService(dbContext);
 
             // Act
-            var result = service.RetrieveTransaction(201);
+            var result = service.RetrieveTransaction(transaction.Id);
 
             // Assert
             Assert.IsNotNull(result, FailureMessages.ResultIsNull);
@@ -307,7 +307,7 @@ namespace MSJennings.PersonalFinance.Tests.Data.Services.EntityFramework
             var service = new TransactionsDataService(dbContext);
 
             // Act
-            var result = await service.RetrieveTransactionAsync(201);
+            var result = await service.RetrieveTransactionAsync(transaction.Id);
 
             // Assert
             Assert.IsNotNull(result, FailureMessages.ResultIsNull);
