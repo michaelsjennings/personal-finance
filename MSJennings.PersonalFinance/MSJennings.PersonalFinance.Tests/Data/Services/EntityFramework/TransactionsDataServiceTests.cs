@@ -241,10 +241,15 @@ namespace MSJennings.PersonalFinance.Tests.Data.Services.EntityFramework
         public void RetrieveTransaction_WithValidTransactionId_ShouldReturnTransaction()
         {
             // Arrange
+            var category = new Category
+            {
+                Id = 101
+            };
+
             var transaction = new Transaction
             {
                 Amount = 123.45m,
-                CategoryId = 101,
+                CategoryId = category.Id,
                 Date = DateTime.Today,
                 Id = 201,
                 IsCredit = true,
@@ -253,6 +258,7 @@ namespace MSJennings.PersonalFinance.Tests.Data.Services.EntityFramework
 
             using var dbContext = GetDbContext();
 
+            dbContext.Add(category);
             dbContext.Add(transaction);
             dbContext.SaveChanges();
 
@@ -289,10 +295,15 @@ namespace MSJennings.PersonalFinance.Tests.Data.Services.EntityFramework
         public async Task RetrieveTransactionAsync_WithValidTransactionId_ShouldReturnTransaction()
         {
             // Arrange
+            var category = new Category
+            {
+                Id = 101
+            };
+
             var transaction = new Transaction
             {
                 Amount = 123.45m,
-                CategoryId = 101,
+                CategoryId = category.Id,
                 Date = DateTime.Today,
                 Id = 201,
                 IsCredit = true,
@@ -301,6 +312,7 @@ namespace MSJennings.PersonalFinance.Tests.Data.Services.EntityFramework
 
             using var dbContext = GetDbContext();
 
+            dbContext.Add(category);
             dbContext.Add(transaction);
             dbContext.SaveChanges();
 
@@ -322,6 +334,12 @@ namespace MSJennings.PersonalFinance.Tests.Data.Services.EntityFramework
         public void RetrieveTransactions_WithNoPredicate_ShouldReturnAllTransactions()
         {
             // Arrange
+            var categories = new[]
+            {
+                new Category { Id = 101 },
+                new Category { Id = 102 }
+            };
+
             var transactions = new[]
             {
                 new Transaction
@@ -355,6 +373,7 @@ namespace MSJennings.PersonalFinance.Tests.Data.Services.EntityFramework
 
             using var dbContext = GetDbContext();
 
+            dbContext.AddRange(categories);
             dbContext.AddRange(transactions);
             dbContext.SaveChanges();
 
@@ -378,6 +397,12 @@ namespace MSJennings.PersonalFinance.Tests.Data.Services.EntityFramework
         public void RetrieveTransactions_WithPredicate_ShouldReturnExpectedTransactions()
         {
             // Arrange
+            var categories = new[]
+            {
+                new Category { Id = 101 },
+                new Category { Id = 102 }
+            };
+
             var transactions = new[]
             {
                 new Transaction
@@ -411,6 +436,7 @@ namespace MSJennings.PersonalFinance.Tests.Data.Services.EntityFramework
 
             using var dbContext = GetDbContext();
 
+            dbContext.AddRange(categories);
             dbContext.AddRange(transactions);
             dbContext.SaveChanges();
 
@@ -434,6 +460,12 @@ namespace MSJennings.PersonalFinance.Tests.Data.Services.EntityFramework
         public async Task RetrieveTransactionsAsync_WithNoPredicate_ShouldReturnAllTransactions()
         {
             // Arrange
+            var categories = new[]
+{
+                new Category { Id = 101 },
+                new Category { Id = 102 }
+            };
+
             var transactions = new[]
             {
                 new Transaction
@@ -467,6 +499,7 @@ namespace MSJennings.PersonalFinance.Tests.Data.Services.EntityFramework
 
             using var dbContext = GetDbContext();
 
+            dbContext.AddRange(categories);
             dbContext.AddRange(transactions);
             dbContext.SaveChanges();
 
@@ -490,6 +523,12 @@ namespace MSJennings.PersonalFinance.Tests.Data.Services.EntityFramework
         public async Task RetrieveTransactionsAsync_WithPredicate_ShouldReturnExpectedTransactions()
         {
             // Arrange
+            var categories = new[]
+{
+                new Category { Id = 101 },
+                new Category { Id = 102 }
+            };
+
             var transactions = new[]
             {
                 new Transaction
@@ -523,6 +562,7 @@ namespace MSJennings.PersonalFinance.Tests.Data.Services.EntityFramework
 
             using var dbContext = GetDbContext();
 
+            dbContext.AddRange(categories);
             dbContext.AddRange(transactions);
             dbContext.SaveChanges();
 
