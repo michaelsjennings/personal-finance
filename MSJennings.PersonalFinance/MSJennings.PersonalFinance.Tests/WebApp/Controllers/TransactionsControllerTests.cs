@@ -92,6 +92,25 @@ namespace MSJennings.PersonalFinance.Tests.WebApp.Controllers
         [TestMethod]
         public async Task Add_WithNullViewModel_ShouldThrowException()
         {
+            // Arrange
+            var controllerBuilder = new TransactionsControllerBuilder();
+            using var controller = controllerBuilder.Build();
+
+            Exception caughtException = null;
+
+            // Act
+            try
+            {
+                _ = await controller.Add(null);
+            }
+            catch (Exception exception)
+            {
+                caughtException = exception;
+            }
+
+            // Assert
+            Assert.IsNotNull(caughtException, FailureMessages.ExceptionNotThrown);
+            Assert.IsInstanceOfType(caughtException, typeof(ArgumentNullException), FailureMessages.ExceptionNotExpectedType);
         }
 
         [TestMethod]
@@ -152,8 +171,8 @@ namespace MSJennings.PersonalFinance.Tests.WebApp.Controllers
         {
             #region Public Fields
 
-            //public const string ExceptionNotExpectedType = "Exception is not the expected type";
-            //public const string ExceptionNotThrown = "Exception was not thrown";
+            public const string ExceptionNotExpectedType = "Exception is not the expected type";
+            public const string ExceptionNotThrown = "Exception was not thrown";
             public const string IncorrectItemCount = "Sequence does not contain the expected number of items";
 
             //public const string MissingExpectedItem = "Sequence does not contain an expected item";
