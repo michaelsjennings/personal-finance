@@ -1,5 +1,5 @@
-﻿using MSJennings.PersonalFinance.Data.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using MSJennings.PersonalFinance.Data.Models;
 
 namespace MSJennings.PersonalFinance.WebApp.ViewModels.Transactions
 {

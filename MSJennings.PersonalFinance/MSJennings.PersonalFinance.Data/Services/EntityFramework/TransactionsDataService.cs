@@ -1,10 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MSJennings.PersonalFinance.Data.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using MSJennings.PersonalFinance.Data.Models;
 
 namespace MSJennings.PersonalFinance.Data.Services.EntityFramework
 {

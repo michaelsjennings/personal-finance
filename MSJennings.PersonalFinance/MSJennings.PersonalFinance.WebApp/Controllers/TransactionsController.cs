@@ -187,6 +187,15 @@ namespace MSJennings.PersonalFinance.WebApp.Controllers
             return View(viewModel);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Index(TransactionsIndexViewModel viewModel)
+        {
+            if (viewModel is null)
+            {
+                this new ArgumentNullException(nameof(viewModel));
+            }
+        }
+
         #endregion Public Methods
     }
 }

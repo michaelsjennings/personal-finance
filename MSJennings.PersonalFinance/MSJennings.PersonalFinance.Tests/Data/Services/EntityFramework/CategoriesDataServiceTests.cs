@@ -1,11 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MSJennings.PersonalFinance.Data.Models;
-using MSJennings.PersonalFinance.Data.Services.EntityFramework;
-using System;
+﻿using System;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MSJennings.PersonalFinance.Data.Models;
+using MSJennings.PersonalFinance.Data.Services.EntityFramework;
 
 namespace MSJennings.PersonalFinance.Tests.Data.Services.EntityFramework
 {

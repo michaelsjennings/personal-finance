@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
 using MSJennings.PersonalFinance.WebApp.ViewModels.Shared;
-using System.Diagnostics;
 
 namespace MSJennings.PersonalFinance.WebApp.Controllers
 {

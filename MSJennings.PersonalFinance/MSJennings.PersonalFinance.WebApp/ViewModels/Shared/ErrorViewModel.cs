@@ -1,6 +1,4 @@
-using System;
-
-namespace MSJennings.PersonalFinance.WebApp.ViewModels.Shared
+﻿namespace MSJennings.PersonalFinance.WebApp.ViewModels.Shared
 {
     public class ErrorViewModel
     {
