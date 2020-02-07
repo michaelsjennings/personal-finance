@@ -9,12 +9,15 @@ namespace MSJennings.PersonalFinance.WebApp.ViewModels.Transactions
 
         public TransactionsIndexViewModel()
         {
+            TransactionsFilter = new TransactionsFilterViewModel();
             TransactionsList = new List<Transaction>();
         }
 
         #endregion Public Constructors
 
         #region Public Properties
+
+        public TransactionsFilterViewModel TransactionsFilter { get; private set; }
 
         public IList<Transaction> TransactionsList { get; private set; }
 

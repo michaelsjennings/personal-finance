@@ -1,46 +1,64 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MSJennings.PersonalFinance.Data.Models;
 
 namespace MSJennings.PersonalFinance.WebApp.ViewModels.Transactions
 {
-    public class TransactionsIndexFilterViewModel
+    public class TransactionsFilterViewModel
     {
-        public int PageSize { get; set; } = 10;
+        #region Public Properties
 
-        public int PageIndex { get; set; } = 0;
-
-        public string SortName { get; set; }
-
-        public bool SortDescending { get; set; } = false;
-
-        public decimal? AmountRangeStart { get; set; }
-
+        [Display(Name = "Amount To")]
         public decimal? AmountRangeEnd { get; set; }
 
-        public int? CategoryId { get; set; }
+        [Display(Name = "Amount From")]
+        public decimal? AmountRangeStart { get; set; }
 
         public SelectList CategoriesList { get; set; }
 
-        public DateTime? DateRangeStart { get; set; }
+        [Display(Name = "Category")]
+        public int? CategoryId { get; set; }
 
+        [Display(Name = "Date To")]
         public DateTime? DateRangeEnd { get; set; }
 
+        [Display(Name = "Date From")]
+        public DateTime? DateRangeStart { get; set; }
+
+        [Display(Name = "Is Credit")]
         public bool? IsCredit { get; set; }
 
+        [Display(Name = "Memo")]
         public string Memo { get; set; }
 
-        public IQueryable<Transaction> ApplyFilteringSortingAndPating(IQueryable<Transaction> query)
+        public int PageIndex { get; set; } = 0;
+
+        public int PageSize { get; set; } = 10;
+
+        public bool SortDescending { get; set; } = false;
+
+        public string SortName { get; set; }
+
+        #endregion Public Properties
+
+        #region Public Methods
+
+        public IQueryable<Transaction> ApplyFilteringSortingAndPaging(IQueryable<Transaction> query)
         {
-            query = ApplyFilter(query);
-            query = ApplySort(query);
-            query = ApplyPage(query);
+            query = ApplyFiltering(query);
+            query = ApplySorting(query);
+            query = ApplyPaging(query);
 
             return query;
         }
 
-        private IQueryable<Transaction> ApplyFilter(IQueryable<Transaction> query)
+        #endregion Public Methods
+
+        #region Private Methods
+
+        private IQueryable<Transaction> ApplyFiltering(IQueryable<Transaction> query)
         {
             if (AmountRangeStart.HasValue)
             {
@@ -74,13 +92,25 @@ namespace MSJennings.PersonalFinance.WebApp.ViewModels.Transactions
 
             if (!string.IsNullOrWhiteSpace(Memo))
             {
-                query = query.Where(x => x.Memo.Contains(Memo, StringComparison.OrdinalIgnoreCase));
+                query = query.Where(x => x.Memo.Contains(Memo));
             }
 
             return query;
         }
 
-        private IQueryable<Transaction> ApplySort(IQueryable<Transaction> query)
+        private IQueryable<Transaction> ApplyPaging(IQueryable<Transaction> query)
+        {
+            if (PageSize > 0)
+            {
+                query = query
+                    .Skip(PageIndex * PageSize)
+                    .Take(PageSize);
+            }
+
+            return query;
+        }
+
+        private IQueryable<Transaction> ApplySorting(IQueryable<Transaction> query)
         {
             if (!string.IsNullOrWhiteSpace(SortName))
             {
@@ -116,16 +146,6 @@ namespace MSJennings.PersonalFinance.WebApp.ViewModels.Transactions
             return query;
         }
 
-        private IQueryable<Transaction> ApplyPage(IQueryable<Transaction> query)
-        {
-            if (PageSize > 0)
-            {
-                query = query
-                    .Skip(PageIndex * PageSize)
-                    .Take(PageSize);
-            }
-
-            return query;
-        }
+        #endregion Private Methods
     }
 }

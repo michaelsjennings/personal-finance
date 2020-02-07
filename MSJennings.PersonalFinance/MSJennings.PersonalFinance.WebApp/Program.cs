@@ -5,10 +5,7 @@ namespace MSJennings.PersonalFinance.WebApp
 {
     public class Program
     {
-        public static void Main(string[] args)
-        {
-            CreateHostBuilder(args).Build().Run();
-        }
+        #region Public Methods
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
@@ -16,5 +13,12 @@ namespace MSJennings.PersonalFinance.WebApp
                 {
                     webBuilder.UseStartup<Startup>();
                 });
+
+        public static void Main(string[] args)
+        {
+            CreateHostBuilder(args).Build().Run();
+        }
+
+        #endregion Public Methods
     }
 }

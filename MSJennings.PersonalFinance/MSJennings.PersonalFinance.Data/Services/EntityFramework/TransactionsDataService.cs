@@ -32,6 +32,11 @@ namespace MSJennings.PersonalFinance.Data.Services.EntityFramework
 
         #region Public Methods
 
+        public IQueryable<Transaction> BuildTransactionsQuery()
+        {
+            return _dbContext.Transactions.Include(x => x.Category).AsNoTracking();
+        }
+
         public int CreateTransaction(Transaction transaction)
         {
             if (transaction is null)
@@ -88,6 +93,28 @@ namespace MSJennings.PersonalFinance.Data.Services.EntityFramework
             return true;
         }
 
+        public IList<Transaction> ExecuteTransactionsQuery(IQueryable<Transaction> query)
+        {
+            return query
+                .AsNoTracking()
+                .Include(x => x.Category)
+                .ToList();
+        }
+
+        IList<Transaction> ITransactionsDataService.ExecuteTransactionsQuery(IQueryable<Transaction> query)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<IList<Transaction>> ExecuteTransactionsQueryAsync(IQueryable<Transaction> query)
+        {
+            return await query
+                .AsNoTracking()
+                .Include(x => x.Category)
+                .ToListAsync()
+                .ConfigureAwait(false);
+        }
+
         public Transaction RetrieveTransaction(int transactionId)
         {
             return _dbContext.Transactions
@@ -139,11 +166,6 @@ namespace MSJennings.PersonalFinance.Data.Services.EntityFramework
                 .Where(predicate)
                 .ToListAsync()
                 .ConfigureAwait(false);
-        }
-
-        public IQueryable<Transaction> RetrieveTransactionsQuery()
-        {
-            return _dbContext.Transactions.Include(x => x.Category).AsNoTracking();
         }
 
         public bool UpdateTransaction(Transaction transaction)

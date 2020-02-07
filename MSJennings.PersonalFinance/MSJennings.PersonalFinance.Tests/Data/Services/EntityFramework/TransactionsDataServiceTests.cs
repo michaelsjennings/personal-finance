@@ -591,7 +591,7 @@ namespace MSJennings.PersonalFinance.Tests.Data.Services.EntityFramework
             var service = new TransactionsDataService(dbContext);
 
             // Act
-            var result = service.RetrieveTransactionsQuery();
+            var result = service.BuildTransactionsQuery();
 
             // Assert
             Assert.IsNotNull(result, FailureMessages.ResultIsNull);

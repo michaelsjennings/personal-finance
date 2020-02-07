@@ -6,6 +6,48 @@
 
 <h1>@ViewData["Title"]</h1>
 
+<fieldset>
+    <legend>Filter</legend>
+
+    <form method="post">
+        <div class="form-group">
+            <label asp-for="TransactionsFilter.DateRangeStart"></label>
+            <input type="date" class="form-control" asp-for="TransactionsFilter.DateRangeStart" />
+
+            <label asp-for="TransactionsFilter.DateRangeEnd"></label>
+            <input type="date" class="form-control" asp-for="TransactionsFilter.DateRangeEnd" />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="TransactionsFilter.CategoryId"></label>
+            <select class="form-control" asp-for="TransactionsFilter.CategoryId" asp-items="Model.TransactionsFilter.CategoriesList"></select>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="TransactionsFilter.Memo"></label>
+            <textarea class="form-control" asp-for="TransactionsFilter.Memo"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="TransactionsFilter.AmountRangeStart"></label>
+            <input type="number" step="0.01" class="form-control" asp-for="TransactionsFilter.AmountRangeStart" />
+
+            <label asp-for="TransactionsFilter.AmountRangeEnd"></label>
+            <input type="number" step="0.01" class="form-control" asp-for="TransactionsFilter.AmountRangeEnd" />
+        </div>
+
+        @*
+            <div class="form-group">
+                <label asp-for="TransactionsFilter.IsCredit"></label>
+                <input type="checkbox" class="form-control" asp-for="TransactionsFilter.IsCredit" />
+            </div>
+        *@
+
+        <input type="submit" value="Filter" />
+        <input type="reset" />
+    </form>
+</fieldset>
+
 <div>
     <a title="Add" asp-action="Add">Add</a>
 </div>

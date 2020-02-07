@@ -11,6 +11,8 @@ namespace MSJennings.PersonalFinance.Data.Services
     {
         #region Public Methods
 
+        public IQueryable<Transaction> BuildTransactionsQuery();
+
         public int CreateTransaction(Transaction transaction);
 
         public Task<int> CreateTransactionAsync(Transaction transaction);
@@ -18,6 +20,10 @@ namespace MSJennings.PersonalFinance.Data.Services
         public bool DeleteTransaction(int transactionId);
 
         public Task<bool> DeleteTransactionAsync(int transactionId);
+
+        public IList<Transaction> ExecuteTransactionsQuery(IQueryable<Transaction> query);
+
+        public Task<IList<Transaction>> ExecuteTransactionsQueryAsync(IQueryable<Transaction> query);
 
         public Transaction RetrieveTransaction(int transactionId);
 
@@ -30,8 +36,6 @@ namespace MSJennings.PersonalFinance.Data.Services
         public Task<IList<Transaction>> RetrieveTransactionsAsync();
 
         public Task<IList<Transaction>> RetrieveTransactionsAsync(Expression<Func<Transaction, bool>> predicate);
-
-        public IQueryable<Transaction> RetrieveTransactionsQuery();
 
         public bool UpdateTransaction(Transaction transaction);
 

@@ -178,6 +178,11 @@ namespace MSJennings.PersonalFinance.WebApp.Controllers
         {
             var viewModel = new TransactionsIndexViewModel();
 
+            viewModel.TransactionsFilter.CategoriesList = new SelectList(
+                    await _categoriesDataService.RetrieveCategoriesAsync().ConfigureAwait(false),
+                    nameof(Category.Id),
+                    nameof(Category.Name));
+
             var transactions = await _transactionsDataService.RetrieveTransactionsAsync().ConfigureAwait(false);
             foreach (var transaction in transactions)
             {
@@ -192,8 +197,24 @@ namespace MSJennings.PersonalFinance.WebApp.Controllers
         {
             if (viewModel is null)
             {
-                this new ArgumentNullException(nameof(viewModel));
+                throw new ArgumentNullException(nameof(viewModel));
             }
+
+            if (viewModel.TransactionsFilter is null)
+            {
+                throw new InvalidOperationException($"{nameof(viewModel.TransactionsFilter)} is null");
+            }
+
+            var query = _transactionsDataService.BuildTransactionsQuery();
+            query = viewModel.TransactionsFilter.ApplyFilteringSortingAndPaging(query);
+
+            var transactions = await _transactionsDataService.ExecuteTransactionsQueryAsync(query).ConfigureAwait(false);
+            foreach (var transaction in transactions)
+            {
+                viewModel.TransactionsList.Add(transaction);
+            }
+
+            return View(viewModel);
         }
 
         #endregion Public Methods
