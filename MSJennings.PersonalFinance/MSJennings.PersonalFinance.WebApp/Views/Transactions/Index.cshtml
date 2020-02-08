@@ -20,7 +20,9 @@
 
         <div class="form-group">
             <label asp-for="TransactionsFilter.CategoryId"></label>
-            <select class="form-control" asp-for="TransactionsFilter.CategoryId" asp-items="Model.TransactionsFilter.CategoriesList"></select>
+            <select class="form-control" asp-for="TransactionsFilter.CategoryId" asp-items="Model.TransactionsFilter.CategoriesList">
+                <option></option>
+            </select>
         </div>
 
         <div class="form-group">
@@ -36,12 +38,12 @@
             <input type="number" step="0.01" class="form-control" asp-for="TransactionsFilter.AmountRangeEnd" />
         </div>
 
-        @*
-            <div class="form-group">
-                <label asp-for="TransactionsFilter.IsCredit"></label>
-                <input type="checkbox" class="form-control" asp-for="TransactionsFilter.IsCredit" />
-            </div>
-        *@
+        <div class="form-group">
+            <label asp-for="TransactionsFilter.IsCredit"></label>
+            <select class="form-control" asp-for="TransactionsFilter.IsCredit" asp-items="Model.TransactionsFilter.IsCreditList">
+                <option></option>
+            </select>
+        </div>
 
         <input type="submit" value="Filter" />
         <input type="reset" />

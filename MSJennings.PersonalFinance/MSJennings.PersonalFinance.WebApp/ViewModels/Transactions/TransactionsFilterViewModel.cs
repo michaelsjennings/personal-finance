@@ -30,6 +30,8 @@ namespace MSJennings.PersonalFinance.WebApp.ViewModels.Transactions
         [Display(Name = "Is Credit")]
         public bool? IsCredit { get; set; }
 
+        public SelectList IsCreditList { get; set; }
+
         [Display(Name = "Memo")]
         public string Memo { get; set; }
 

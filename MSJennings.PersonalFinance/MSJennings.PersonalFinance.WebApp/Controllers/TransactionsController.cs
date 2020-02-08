@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -179,9 +182,18 @@ namespace MSJennings.PersonalFinance.WebApp.Controllers
             var viewModel = new TransactionsIndexViewModel();
 
             viewModel.TransactionsFilter.CategoriesList = new SelectList(
-                    await _categoriesDataService.RetrieveCategoriesAsync().ConfigureAwait(false),
-                    nameof(Category.Id),
-                    nameof(Category.Name));
+                await _categoriesDataService.RetrieveCategoriesAsync().ConfigureAwait(false),
+                nameof(Category.Id),
+                nameof(Category.Name));
+
+            viewModel.TransactionsFilter.IsCreditList = new SelectList(
+                new[]
+                {
+                    new { Value = true.ToString(CultureInfo.InvariantCulture), Text = "Yes" },
+                    new { Value = false.ToString(CultureInfo.InvariantCulture), Text = "No" }
+                },
+                nameof(SelectListItem.Value),
+                nameof(SelectListItem.Text));
 
             var transactions = await _transactionsDataService.RetrieveTransactionsAsync().ConfigureAwait(false);
             foreach (var transaction in transactions)
