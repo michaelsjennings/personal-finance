@@ -176,6 +176,7 @@ namespace MSJennings.PersonalFinance.WebApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        /*
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -195,6 +196,15 @@ namespace MSJennings.PersonalFinance.WebApp.Controllers
                 nameof(SelectListItem.Value),
                 nameof(SelectListItem.Text));
 
+            viewModel.TransactionsFilter.PageSizesList = new SelectList(
+                new[] { 10, 25, 50, 100 }.Select(x => new
+                {
+                    Value = x.ToString(CultureInfo.InvariantCulture),
+                    Text = x.ToString(CultureInfo.InvariantCulture)
+                }),
+                nameof(SelectListItem.Value),
+                nameof(SelectListItem.Text));
+
             var transactions = await _transactionsDataService.RetrieveTransactionsAsync().ConfigureAwait(false);
             foreach (var transaction in transactions)
             {
@@ -203,10 +213,12 @@ namespace MSJennings.PersonalFinance.WebApp.Controllers
 
             return View(viewModel);
         }
+        */
 
-        [HttpPost]
-        public async Task<IActionResult> Index(TransactionsIndexViewModel viewModel)
+        [HttpGet, HttpPost]
+        public async Task<IActionResult> Index(TransactionsIndexViewModel viewModel = null)
         {
+            /*
             if (viewModel is null)
             {
                 throw new ArgumentNullException(nameof(viewModel));
@@ -216,6 +228,35 @@ namespace MSJennings.PersonalFinance.WebApp.Controllers
             {
                 throw new InvalidOperationException($"{nameof(viewModel.TransactionsFilter)} is null");
             }
+            */
+
+            if (viewModel is null)
+            {
+                viewModel = new TransactionsIndexViewModel();
+            }
+
+            viewModel.TransactionsFilter.CategoriesList = new SelectList(
+                await _categoriesDataService.RetrieveCategoriesAsync().ConfigureAwait(false),
+                nameof(Category.Id),
+                nameof(Category.Name));
+
+            viewModel.TransactionsFilter.IsCreditList = new SelectList(
+                new[]
+                {
+                    new { Value = true.ToString(CultureInfo.InvariantCulture), Text = "Yes" },
+                    new { Value = false.ToString(CultureInfo.InvariantCulture), Text = "No" }
+                },
+                nameof(SelectListItem.Value),
+                nameof(SelectListItem.Text));
+
+            viewModel.TransactionsFilter.PageSizesList = new SelectList(
+                new[] { 10, 25, 50, 100 }.Select(x => new
+                {
+                    Value = x.ToString(CultureInfo.InvariantCulture),
+                    Text = x.ToString(CultureInfo.InvariantCulture)
+                }),
+                nameof(SelectListItem.Value),
+                nameof(SelectListItem.Text));
 
             var query = _transactionsDataService.BuildTransactionsQuery();
             query = viewModel.TransactionsFilter.ApplyFilteringSortingAndPaging(query);

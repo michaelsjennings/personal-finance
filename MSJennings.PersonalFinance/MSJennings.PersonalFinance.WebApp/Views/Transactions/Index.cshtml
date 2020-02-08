@@ -45,17 +45,22 @@
             </select>
         </div>
 
-        <input type="submit" value="Filter" />
-        <input type="reset" />
+        <div class="form-group">
+            <label asp-for="TransactionsFilter.PageSize"></label>
+            <select class="form-control" asp-for="TransactionsFilter.PageSize" asp-items="Model.TransactionsFilter.PageSizesList"></select>
+        </div>
+
+        <button type="submit" title="Filter" class="btn btn-outline-primary"><i class="fa fa-filter"></i> Filter</button>
+        <button type="button" title="Clear" class="btn btn-outline-secondary"><i class="fa fa-undo"></i> Clear</button>
     </form>
 </fieldset>
 
 <div>
-    <a title="Add" asp-action="Add">Add</a>
+    <a title="Add" asp-action="Add" class="btn btn-outline-success"><i class="far fa-plus-square"></i> Add</a>
 </div>
 
-<table>
-    <thead>
+<table class="table table-sm table-hover">
+    <thead class="thead-light">
         <tr>
             <th>Date</th>
             <th>Category</th>
@@ -75,10 +80,10 @@
                 <td>@transaction.Amount</td>
                 <td>@transaction.IsCredit</td>
                 <td>
-                    <a title="Details" asp-action="Details" asp-route-id="@transaction.Id">Details</a>
-                    <a title="Edit" asp-action="Edit" asp-route-id="@transaction.Id">Edit</a>
+                    <a title="Details" asp-action="Details" asp-route-id="@transaction.Id" class="btn btn-sm btn-outline-secondary text-nowrap"><i class="fa fa-bars"></i> Details</a>
+                    <a title="Edit" asp-action="Edit" asp-route-id="@transaction.Id" class="btn btn-sm btn-outline-success text-nowrap"><i class="far fa-edit"></i> Edit</a>
                     <form asp-action="Delete" asp-route-id="@transaction.Id" method="post">
-                        <input type="submit" title="Delete" value="Delete" />
+                        <button type="submit" title="Delete" class="btn btn-sm btn-outline-danger text-nowrap"><i class="fa fa-trash-alt"></i> Delete</button>
                     </form>
                 </td>
             </tr>

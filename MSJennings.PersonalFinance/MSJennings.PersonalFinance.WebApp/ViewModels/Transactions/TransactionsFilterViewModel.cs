@@ -37,7 +37,10 @@ namespace MSJennings.PersonalFinance.WebApp.ViewModels.Transactions
 
         public int PageIndex { get; set; } = 0;
 
+        [Display(Name = "Page Size")]
         public int PageSize { get; set; } = 10;
+
+        public SelectList PageSizesList { get; set; }
 
         public bool SortDescending { get; set; } = false;
 
