@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "noImplicitAny": true,
+    "noEmitOnError": true,
+    "removeComments": false,
+    "sourceMap": true,
+    "target": "ES2015",
+    "typeRoots": [
+      "./node_modules/@types"
+    ],
+    "outDir": "./wwwroot/js/dist/",
+    "rootDir": "./Scripts/"
+  },
+  "compileOnSave": true,
+  "include": [
+    "./Scripts/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "wwwroot"
+  ]
+}
