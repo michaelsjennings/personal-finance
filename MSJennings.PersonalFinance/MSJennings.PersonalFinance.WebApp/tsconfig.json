@@ -9,7 +9,8 @@
       "./node_modules/@types"
     ],
     "outDir": "./wwwroot/js/dist/",
-    "rootDir": "./Scripts/"
+    "rootDir": "./Scripts/",
+    "inlineSources": true
   },
   "compileOnSave": true,
   "include": [
