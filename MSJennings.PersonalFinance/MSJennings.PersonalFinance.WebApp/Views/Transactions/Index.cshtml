@@ -57,8 +57,8 @@
             <select class="form-control" asp-for="TransactionsFilter.PageSize" asp-items="Model.TransactionsFilter.PageSizesList"></select>
         </div>
 
-        <button type="submit" title="Filter" class="btn btn-outline-primary"><i class="fa fa-filter"></i> Filter</button>
-        <button type="button" title="Clear" class="btn btn-outline-secondary"><i class="fa fa-undo"></i> Clear</button>
+        <button id="filterButton" type="submit" title="Filter" class="btn btn-outline-primary"><i class="fa fa-filter"></i> Filter</button>
+        <button id="clearButton" type="button" title="Clear" class="btn btn-outline-secondary"><i class="fa fa-undo"></i> Clear</button>
     </form>
 </fieldset>
 
@@ -92,9 +92,6 @@
                     <form asp-action="Delete" asp-route-id="@transaction.Id" method="post">
                         <button type="button" title="Delete" class="deleteTransaction btn btn-sm btn-outline-danger text-nowrap"><i class="fa fa-trash-alt"></i> Delete</button>
                     </form>
-                    @*
-                        <button type="button" title="Delete" class="deleteTransaction btn btn-sm btn-outline-danger text-nowrap" data-transactionid="@transaction.Id"><i class="fa fa-trash-alt"></i> Delete</button>
-                    *@
                 </td>
             </tr>
         }
