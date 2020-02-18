@@ -119,33 +119,30 @@ namespace MSJennings.PersonalFinance.WebApp.ViewModels.Transactions
         {
             if (!string.IsNullOrWhiteSpace(SortName))
             {
-                Func<Transaction, dynamic> orderByFunc = (x) =>
+                if (SortName.Equals(nameof(Transaction.Amount), StringComparison.OrdinalIgnoreCase))
                 {
-                    if (SortName.Equals(nameof(Transaction.Amount), StringComparison.OrdinalIgnoreCase))
-                    {
-                        return x.Amount;
-                    }
-                    else if (SortName.Equals(nameof(Category), StringComparison.OrdinalIgnoreCase))
-                    {
-                        return x.Category.Name;
-                    }
-                    else if (SortName.Equals(nameof(Transaction.Date), StringComparison.OrdinalIgnoreCase))
-                    {
-                        return x.Date;
-                    }
-                    else if (SortName.Equals(nameof(Transaction.IsCredit), StringComparison.OrdinalIgnoreCase))
-                    {
-                        return x.IsCredit;
-                    }
-                    else if (SortName.Equals(nameof(Transaction.Memo), StringComparison.OrdinalIgnoreCase))
-                    {
-                        return x.Memo;
-                    }
-
+                    query = SortDescending ? query.OrderByDescending(x => x.Amount) : query.OrderBy(x => x.Amount);
+                }
+                else if (SortName.Equals(nameof(Category), StringComparison.OrdinalIgnoreCase))
+                {
+                    query = SortDescending ? query.OrderByDescending(x => x.Category.Name) : query.OrderBy(x => x.Category.Name);
+                }
+                else if (SortName.Equals(nameof(Transaction.Date), StringComparison.OrdinalIgnoreCase))
+                {
+                    query = SortDescending ? query.OrderByDescending(x => x.Date) : query.OrderBy(x => x.Date);
+                }
+                else if (SortName.Equals(nameof(Transaction.IsCredit), StringComparison.OrdinalIgnoreCase))
+                {
+                    query = SortDescending ? query.OrderByDescending(x => x.IsCredit) : query.OrderBy(x => x.IsCredit);
+                }
+                else if (SortName.Equals(nameof(Transaction.Memo), StringComparison.OrdinalIgnoreCase))
+                {
+                    query = SortDescending ? query.OrderByDescending(x => x.Memo) : query.OrderBy(x => x.Memo);
+                }
+                else
+                {
                     throw new ArgumentOutOfRangeException(SortName);
-                };
-
-                query = (SortDescending ? query.OrderByDescending(orderByFunc) : query.OrderBy(orderByFunc)) as IOrderedQueryable<Transaction>;
+                }
             }
 
             return query;

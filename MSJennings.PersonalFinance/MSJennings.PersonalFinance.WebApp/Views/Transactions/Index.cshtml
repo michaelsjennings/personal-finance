@@ -1,4 +1,5 @@
 ﻿@model MSJennings.PersonalFinance.WebApp.ViewModels.Transactions.TransactionsIndexViewModel
+@using MSJennings.PersonalFinance.Data.Models
 
 @section Scripts {
     <script type="module">
@@ -16,7 +17,7 @@
 <fieldset>
     <legend>Filter</legend>
 
-    <form method="post">
+    <form id="filterForm" method="post">
         <div class="form-group">
             <label asp-for="TransactionsFilter.DateRangeStart"></label>
             <input type="date" class="form-control" asp-for="TransactionsFilter.DateRangeStart" />
@@ -57,7 +58,10 @@
             <select class="form-control" asp-for="TransactionsFilter.PageSize" asp-items="Model.TransactionsFilter.PageSizesList"></select>
         </div>
 
-        <button id="filterButton" type="submit" title="Filter" class="btn btn-outline-primary"><i class="fa fa-filter"></i> Filter</button>
+        <input type="hidden" asp-for="TransactionsFilter.SortName" />
+        <input type="hidden" asp-for="TransactionsFilter.SortDescending" />
+
+        <button type="submit" title="Filter" class="btn btn-outline-primary"><i class="fa fa-filter"></i> Filter</button>
         <button id="clearButton" type="button" title="Clear" class="btn btn-outline-secondary"><i class="fa fa-undo"></i> Clear</button>
     </form>
 </fieldset>
@@ -66,14 +70,14 @@
     <a title="Add" asp-action="Add" class="btn btn-outline-success"><i class="far fa-plus-square"></i> Add</a>
 </div>
 
-<table class="table table-sm table-hover">
+<table id="transactionsTable" class="table table-sm table-hover">
     <thead class="thead-light">
         <tr>
-            <th>Date</th>
-            <th>Category</th>
-            <th>Memo</th>
-            <th>Amount</th>
-            <th>Is Credit</th>
+            <th class="cursor-pointer" data-sortname="@nameof(Transaction.Date)">Date</th>
+            <th class="cursor-pointer" data-sortname="@nameof(Category)">Category</th>
+            <th class="cursor-pointer" data-sortname="@nameof(Transaction.Memo)">Memo</th>
+            <th class="cursor-pointer" data-sortname="@nameof(Transaction.Amount)">Amount</th>
+            <th class="cursor-pointer" data-sortname="@nameof(Transaction.IsCredit)">Is Credit</th>
             <th></th>
         </tr>
     </thead>

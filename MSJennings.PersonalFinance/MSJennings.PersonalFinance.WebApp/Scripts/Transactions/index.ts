@@ -1,19 +1,35 @@
 ﻿export const onLoad = (): void => {
     addEventHandlers()
+    initSortIcon()
 }
 
 const addEventHandlers = (): void => {
-    $('#filterButton').off('click.filterButton').on('click.filterButton', filterButtonClick)
+    $('#filterForm').off('submit.filterForm').on('submit.filterForm', submitFilterForm)
     $('#clearButton').off('click.clearButton').on('click.clearButton', clearButtonClick)
-    $(document).off('click.deleteButton', '.deleteButton').on('click.deleteButton', '.deleteButton', deleteButtonClick)
+    $('#transactionsTable th[data-sortname]').off('click.sortableHeader').on('click.sortableHeader', sortableHeaderClick)
+    $('#transactionsTable').off('click.deleteButton', '.deleteButton').on('click.deleteButton', '.deleteButton', deleteButtonClick)
 }
 
-const filterButtonClick = (): void => {
+const initSortIcon = (): void => {
+    const sortName = $('#TransactionsFilter_SortName').val().toString()
+    const sortDirection = $('#TransactionsFilter_SortDescending').val().toString().toLocaleLowerCase() === 'true' ? 'down' : 'up'
+    const sortIcon = `<i class="fa fa-sort-${sortDirection}"></i>`
+
+    $(`#transactionsTable th[data-sortname=${sortName}]`).append(sortIcon)
+}
+
+const submitFilterForm = (): void => {
     $.blockUI()
 }
 
 const clearButtonClick = (ev: Event): void => {
     $(ev.target).closest('form').find(':input').val('')
+}
+
+const sortableHeaderClick = (ev: Event): void => {
+    const sortName: string = $(ev.target).data('sortname')
+    $('#TransactionsFilter_SortName').val(sortName)
+    $('#filterForm').submit()
 }
 
 const deleteButtonClick = (ev: Event): void => {
