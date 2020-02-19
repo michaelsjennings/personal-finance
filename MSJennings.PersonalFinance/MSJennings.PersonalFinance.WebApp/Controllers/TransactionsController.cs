@@ -218,18 +218,6 @@ namespace MSJennings.PersonalFinance.WebApp.Controllers
         [HttpGet, HttpPost]
         public async Task<IActionResult> Index(TransactionsIndexViewModel viewModel = null)
         {
-            /*
-            if (viewModel is null)
-            {
-                throw new ArgumentNullException(nameof(viewModel));
-            }
-
-            if (viewModel.TransactionsFilter is null)
-            {
-                throw new InvalidOperationException($"{nameof(viewModel.TransactionsFilter)} is null");
-            }
-            */
-
             if (viewModel is null)
             {
                 viewModel = new TransactionsIndexViewModel();

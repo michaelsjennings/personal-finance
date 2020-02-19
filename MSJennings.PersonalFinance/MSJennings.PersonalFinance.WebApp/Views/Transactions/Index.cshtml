@@ -82,7 +82,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var transaction in Model.TransactionsList.OrderBy(x => x.Date))
+        @foreach (var transaction in Model.TransactionsList)
         {
             <tr>
                 <td>@transaction.Date</td>

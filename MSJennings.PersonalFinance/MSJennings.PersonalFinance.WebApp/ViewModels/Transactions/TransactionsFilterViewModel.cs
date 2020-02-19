@@ -44,7 +44,7 @@ namespace MSJennings.PersonalFinance.WebApp.ViewModels.Transactions
 
         public bool SortDescending { get; set; } = false;
 
-        public string SortName { get; set; }
+        public string SortName { get; set; } = nameof(Transaction.Date);
 
         #endregion Public Properties
 

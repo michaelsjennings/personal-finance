@@ -12,10 +12,12 @@ const addEventHandlers = (): void => {
 
 const initSortIcon = (): void => {
     const sortName = $('#TransactionsFilter_SortName').val().toString()
-    const sortDirection = $('#TransactionsFilter_SortDescending').val().toString().toLocaleLowerCase() === 'true' ? 'down' : 'up'
-    const sortIcon = `<i class="fa fa-sort-${sortDirection}"></i>`
+    if (sortName) {
+        const sortDirection = $('#TransactionsFilter_SortDescending').val().toString().toLocaleLowerCase() === 'true' ? 'down' : 'up'
+        const sortIcon = `<i class="fa fa-sort-${sortDirection}"></i>`
 
-    $(`#transactionsTable th[data-sortname=${sortName}]`).append(sortIcon)
+        $(`#transactionsTable th[data-sortname=${sortName}]`).append(sortIcon)
+    }
 }
 
 const submitFilterForm = (): void => {
@@ -27,8 +29,15 @@ const clearButtonClick = (ev: Event): void => {
 }
 
 const sortableHeaderClick = (ev: Event): void => {
-    const sortName: string = $(ev.target).data('sortname')
-    $('#TransactionsFilter_SortName').val(sortName)
+    const currentSortName = $('#TransactionsFilter_SortName').val() as string
+    const currentSortDescending = $('#TransactionsFilter_SortDescending').val().toString().toLocaleLowerCase() === 'true'
+
+    const newSortName = $(ev.target).data('sortname') as string
+    const newSortDescending = newSortName.toLocaleLowerCase() === currentSortName.toLocaleLowerCase() && !currentSortDescending
+
+    $('#TransactionsFilter_SortName').val(newSortName)
+    $('#TransactionsFilter_SortDescending').val(newSortDescending.toString())
+
     $('#filterForm').submit()
 }
 
