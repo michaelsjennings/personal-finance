@@ -54,6 +54,11 @@
         </div>
 
         <div class="form-group">
+            <label asp-for="TransactionsFilter.PageIndex"></label>
+            <input type="number" step="1" min="0" class="form-control" asp-for="TransactionsFilter.PageIndex" />
+        </div>
+
+        <div class="form-group">
             <label asp-for="TransactionsFilter.PageSize"></label>
             <select class="form-control" asp-for="TransactionsFilter.PageSize" asp-items="Model.TransactionsFilter.PageSizesList"></select>
         </div>
@@ -67,7 +72,13 @@
 </fieldset>
 
 <div>
-    <a title="Add" asp-action="Add" class="btn btn-outline-success"><i class="far fa-plus-square"></i> Add</a>
+    <div class="float-left">
+        <a title="Add" asp-action="Add" class="btn btn-outline-success"><i class="far fa-plus-square"></i> Add</a>
+    </div>
+    <div class="float-right">
+        <button id="previousPageButton" type="button" title="Previous Page" class="btn btn-outline-secondary"><i class="fa fa-lg fa-caret-left"></i></button>
+        <button id="nextPageButton" type="button" title="Next Page" class="btn btn-outline-secondary"><i class="fa fa-lg fa-caret-right"></i></button>
+    </div>
 </div>
 
 <table id="transactionsTable" class="table table-sm table-hover">
@@ -85,11 +96,11 @@
         @foreach (var transaction in Model.TransactionsList)
         {
             <tr>
-                <td>@transaction.Date</td>
+                <td>@transaction.Date.ToShortDateString()</td>
                 <td>@transaction.Category.Name</td>
                 <td>@transaction.Memo</td>
                 <td>@transaction.Amount</td>
-                <td>@transaction.IsCredit</td>
+                <td>@(transaction.IsCredit ? "Yes" : "No")</td>
                 <td>
                     <a title="Details" asp-action="Details" asp-route-id="@transaction.Id" class="btn btn-sm btn-outline-secondary text-nowrap"><i class="fa fa-bars"></i> Details</a>
                     <a title="Edit" asp-action="Edit" asp-route-id="@transaction.Id" class="btn btn-sm btn-outline-success text-nowrap"><i class="far fa-edit"></i> Edit</a>

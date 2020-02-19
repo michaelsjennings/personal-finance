@@ -107,6 +107,11 @@ namespace MSJennings.PersonalFinance.WebApp.ViewModels.Transactions
         {
             if (PageSize > 0)
             {
+                if (PageIndex < 0)
+                {
+                    PageIndex = 0;
+                }
+
                 query = query
                     .Skip(PageIndex * PageSize)
                     .Take(PageSize);

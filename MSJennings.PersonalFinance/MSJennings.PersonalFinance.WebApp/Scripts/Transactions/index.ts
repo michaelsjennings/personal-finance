@@ -6,6 +6,8 @@
 const addEventHandlers = (): void => {
     $('#filterForm').off('submit.filterForm').on('submit.filterForm', submitFilterForm)
     $('#clearButton').off('click.clearButton').on('click.clearButton', clearButtonClick)
+    $('#previousPageButton').off('click.previousPageButton').on('click.previousPageButton', previousPageButtonClick)
+    $('#nextPageButton').off('click.nextPageButton').on('click.nextPageButton', nextPageButtonClick)
     $('#transactionsTable th[data-sortname]').off('click.sortableHeader').on('click.sortableHeader', sortableHeaderClick)
     $('#transactionsTable').off('click.deleteButton', '.deleteButton').on('click.deleteButton', '.deleteButton', deleteButtonClick)
 }
@@ -26,6 +28,24 @@ const submitFilterForm = (): void => {
 
 const clearButtonClick = (ev: Event): void => {
     $(ev.target).closest('form').find(':input').val('')
+}
+
+const previousPageButtonClick = (): void => {
+    const currentPageIndex = Number($('#TransactionsFilter_PageIndex').val())
+    const newPageIndex = currentPageIndex - 1
+
+    $('#TransactionsFilter_PageIndex').val(newPageIndex)
+
+    $('#filterForm').submit()
+}
+
+const nextPageButtonClick = (): void => {
+    const currentPageIndex = Number($('#TransactionsFilter_PageIndex').val())
+    const newPageIndex = currentPageIndex + 1
+
+    $('#TransactionsFilter_PageIndex').val(newPageIndex)
+
+    $('#filterForm').submit()
 }
 
 const sortableHeaderClick = (ev: Event): void => {
